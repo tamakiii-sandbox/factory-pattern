@@ -33,7 +33,7 @@ class RegisterableTest extends \PHPUnit_Framework_TestCase
      */
     public function canCreateWithRegisteredInConstructor()
     {
-        $this->assertInstanceOf('\stdClass', $this->factory->create('std'));
+        $this->assertInstanceOf('\stdClass', $this->factory->make('std'));
     }
 
     /**
@@ -42,7 +42,7 @@ class RegisterableTest extends \PHPUnit_Framework_TestCase
     public function canCreateWithRegisteredWithRegisterMethod()
     {
         $this->factory->register('fixed_array', '\SplFixedArray');
-        $this->assertInstanceOf('\SplFixedArray', $this->factory->create('fixed_array'));
+        $this->assertInstanceOf('\SplFixedArray', $this->factory->make('fixed_array'));
     }
 
     /**
@@ -51,7 +51,7 @@ class RegisterableTest extends \PHPUnit_Framework_TestCase
     public function canReplaceOldRegistration()
     {
         $this->factory->register('std', '\SplFixedArray');
-        $this->assertInstanceOf('\SplFixedArray', $this->factory->create('std'));
+        $this->assertInstanceOf('\SplFixedArray', $this->factory->make('std'));
     }
 
     /**
@@ -60,7 +60,7 @@ class RegisterableTest extends \PHPUnit_Framework_TestCase
     public function canPassSingleCtorArgs()
     {
         $this->factory->register('fixed_array', '\SplFixedArray');
-        $object = $this->factory->create('fixed_array', array(10));
+        $object = $this->factory->make('fixed_array', array(10));
 
         $this->assertSame($object->count(), 10);
     }
@@ -71,7 +71,7 @@ class RegisterableTest extends \PHPUnit_Framework_TestCase
     public function canPassMultipleCtorArgs()
     {
         $this->factory->register('exception', '\Exception');
-        $object = $this->factory->create('exception', array('Test', 100));
+        $object = $this->factory->make('exception', array('Test', 100));
 
         $this->assertSame('Test', $object->getMessage());
         $this->assertSame(100, $object->getCode());

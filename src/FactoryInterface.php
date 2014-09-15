@@ -12,5 +12,5 @@ interface FactoryInterface
      * @param array $args
      * @return mixed
      */
-    public function create($name, array $args = array());
+    public function make($name, array $args = array());
 }

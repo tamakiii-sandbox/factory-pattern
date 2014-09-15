@@ -26,7 +26,7 @@ class Registerable implements RegisterableInterface
      * @parma array $args
      * @return mixed
      */
-    public function create($name, array $args = array())
+    public function make($name, array $args = array())
     {
         if (empty($this->list[$name])) {
             throw new \LogicException("No class found for '{$name}'");
