@@ -18,22 +18,15 @@ class RegisterableFactoryInjectable
      */
     private $factories;
 
-    /**
-     * @var FunctionsInterface
-     */
-    private $functions;
-
 
     /**
      * @param FunctionsInterface $functions
-     * @param array $list
      */
-    public function __construct(FunctionsInterface $functions, array $list = array())
+    public function __construct(FunctionsInterface $functions)
     {
-        $this->factories = array();
-        $this->functions = $functions;
+        parent::__construct($functions);
 
-        parent::__construct($list);
+        $this->factories = array();
     }
 
     /**
@@ -62,7 +55,7 @@ class RegisterableFactoryInjectable
      */
     protected function match($class)
     {
-        if (!$interfaces = $this->functions->classImplements($class)) {
+        if (!$interfaces = $this->getFunctions()->classImplements($class)) {
             throw new \UnexpectedValueException("Factory must implement least one interface '{$class}'");
         }
 

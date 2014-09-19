@@ -38,11 +38,16 @@ class RegisterableFactoryInjectableTest extends \PHPUnit_Framework_TestCase
         $this->functions = Phake::mock('Concretehouse\Dp\Factory\FunctionsInterface');
 
         // Prepare registerable factory-injectable factory
-        $this->factory = new RegisterableFactoryInjectable($this->functions, $this->classes);
+        $this->factory = new RegisterableFactoryInjectable($this->functions);
 
         // Add factories
         foreach ($this->matchers as $matcher) {
             $this->factory->addFactory($matcher);
+        }
+
+        // Add classes
+        foreach ($this->classes as $name => $class) {
+            $this->factory->register($name, $class);
         }
     }
 
@@ -59,7 +64,7 @@ class RegisterableFactoryInjectableTest extends \PHPUnit_Framework_TestCase
      */
     public function extendsRegisterable()
     {
-        $this->assertInstanceOf('Concretehouse\Dp\Factory\Registerable', $this->factory);
+        $this->assertInstanceOf('Concretehouse\Dp\Factory\Concretes\Registerable', $this->factory);
     }
 
     /**
