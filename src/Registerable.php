@@ -28,12 +28,8 @@ class Registerable implements RegisterableInterface
      */
     public function make($name, array $args = array())
     {
-        if (empty($this->list[$name])) {
-            throw new \LogicException("No class found for '{$name}'");
-        }
-
         // Prepare relrection class
-        $class = $this->list[$name];
+        $class = $this->getClass($name);
         $reflect = new \ReflectionClass($class);
 
         // Create with `new` if class does not have constructor
@@ -45,6 +41,18 @@ class Registerable implements RegisterableInterface
 
         // Create instance with constructor
         return $reflect->newInstanceArgs($args);
+    }
+
+    /**
+     * @param string $name
+     * @return string
+     */
+    protected function getClass($name)
+    {
+        if (empty($this->list[$name])) {
+            throw new \LogicException("No class found for '{$name}'");
+        }
+        return $this->list[$name];
     }
 
     /**
