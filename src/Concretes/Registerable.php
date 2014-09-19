@@ -2,6 +2,7 @@
 
 namespace Concretehouse\Dp\Factory\Concretes;
 
+use Concretehouse\Dp\Factory\FunctionsInterface;
 use Concretehouse\Dp\Factory\RegisterableInterface;
 
 /**
@@ -14,13 +15,19 @@ class Registerable implements RegisterableInterface
      */
     private $list;
 
+    /**
+     * @var FunctionsInterface
+     */
+    private $functions;
+
 
     /**
-     * @param array $list
+     * Constructor
      */
-    public function __construct(array $list = array())
+    public function __construct(FunctionsInterface $functions)
     {
-        $this->list = $list;
+        $this->list = array();
+        $this->functions = $functions;
     }
 
     /**
@@ -30,19 +37,8 @@ class Registerable implements RegisterableInterface
      */
     public function make($name, array $args = array())
     {
-        // Prepare relrection class
         $class = $this->getClass($name);
-        $reflect = new \ReflectionClass($class);
-
-        // Create with `new` if class does not have constructor
-        // This can be written like this(PHP >= 5.4.0)
-        //   return $reflect->newInstanceWithoutConstructor();
-        if (!$ctor = $reflect->getConstructor()) {
-            return new $class;
-        }
-
-        // Create instance with constructor
-        return $reflect->newInstanceArgs($args);
+        return $this->getFunctions()->newInstanceArgs($class, $args);
     }
 
     /**
@@ -64,5 +60,13 @@ class Registerable implements RegisterableInterface
     public function register($name, $class)
     {
         $this->list[$name] = $class;
+    }
+
+    /**
+     * @return FunctionsInterface
+     */
+    protected function getFunctions()
+    {
+        return $this->functions;
     }
 }

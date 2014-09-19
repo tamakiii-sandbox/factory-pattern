@@ -15,9 +15,11 @@ class RegisterableTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->factory = new Registerable(array(
-            'std' => '\stdClass',
-        ));
+        $this->functions = Phake::mock('Concretehouse\Dp\Factory\FunctionsInterface');
+
+        $this->factory = new Registerable($this->functions);
+
+        $this->factory->register('std', '\stdClass');
     }
 
     /**
@@ -33,7 +35,13 @@ class RegisterableTest extends \PHPUnit_Framework_TestCase
      */
     public function canCreateWithRegisteredInConstructor()
     {
-        $this->assertInstanceOf('\stdClass', $this->factory->make('std'));
+        $std = new \stdClass;
+
+        Phake::when($this->functions)
+            ->newInstanceArgs('\stdClass', array())
+            ->thenReturn($std);
+
+        $this->assertSame($std, $this->factory->make('std'));
     }
 
     /**
@@ -41,8 +49,14 @@ class RegisterableTest extends \PHPUnit_Framework_TestCase
      */
     public function canCreateWithRegisteredWithRegisterMethod()
     {
+        $array = new \SplFixedArray(10);
+
+        Phake::when($this->functions)
+            ->newInstanceArgs('\SplFixedArray', array(10))
+            ->thenReturn($array);
+
         $this->factory->register('fixed_array', '\SplFixedArray');
-        $this->assertInstanceOf('\SplFixedArray', $this->factory->make('fixed_array'));
+        $this->assertSame($array, $this->factory->make('fixed_array', array(10)));
     }
 
     /**
@@ -50,30 +64,29 @@ class RegisterableTest extends \PHPUnit_Framework_TestCase
      */
     public function canReplaceOldRegistration()
     {
+        $array = new \SplFixedArray(10);
+
+        Phake::when($this->functions)
+            ->newInstanceArgs('\SplFixedArray', array(10))
+            ->thenReturn($array);
+
         $this->factory->register('std', '\SplFixedArray');
-        $this->assertInstanceOf('\SplFixedArray', $this->factory->make('std'));
+
+        $this->assertSame($array, $this->factory->make('std', array(10)));
     }
 
     /**
-     * @test
-     */
-    public function canPassSingleCtorArgs()
-    {
-        $this->factory->register('fixed_array', '\SplFixedArray');
-        $object = $this->factory->make('fixed_array', array(10));
-
-        $this->assertSame($object->count(), 10);
-    }
-
-    /**
-     * @test
+     * test
      */
     public function canPassMultipleCtorArgs()
     {
-        $this->factory->register('exception', '\Exception');
-        $object = $this->factory->make('exception', array('Test', 100));
+        $exception  = new \Exception('Test', 100);
 
-        $this->assertSame('Test', $object->getMessage());
-        $this->assertSame(100, $object->getCode());
+        Phake::when($this->functions)
+            ->newInstanceArgs('\Exception', array('Test', 100))
+            ->thenReturn($exception);
+
+        $this->factory->register('exception', '\Exception');
+        $this->assertSame($exception, $this->factory->make('exception', array('Test', 100)));
     }
 }
