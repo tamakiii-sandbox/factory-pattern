@@ -32,7 +32,18 @@ class Registerable implements RegisterableInterface
             throw new \LogicException("No class found for '{$name}'");
         }
 
-        $reflect  = new \ReflectionClass($this->list[$name]);
+        // Prepare relrection class
+        $class = $this->list[$name];
+        $reflect = new \ReflectionClass($class);
+
+        // Create with `new` if class does not have constructor
+        // This can be written like this(PHP >= 5.4.0)
+        //   return $reflect->newInstanceWithoutConstructor();
+        if (!$ctor = $reflect->getConstructor()) {
+            return new $class;
+        }
+
+        // Create instance with constructor
         return $reflect->newInstanceArgs($args);
     }
 
