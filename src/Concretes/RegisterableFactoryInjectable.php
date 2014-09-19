@@ -2,7 +2,6 @@
 
 namespace Concretehouse\Dp\Factory\Concretes;
 
-use Concretehouse\Dp\Factory\Registerable;
 use Concretehouse\Dp\Factory\FunctionsInterface;
 use Concretehouse\Dp\Factory\MatchableInterface;
 use Concretehouse\Dp\Factory\MatcherInjectableInterface;

@@ -1,6 +1,8 @@
 <?php
 
-namespace Concretehouse\Dp\Factory;
+namespace Concretehouse\Dp\Factory\Concretes;
+
+use Concretehouse\Dp\Factory\RegisterableInterface;
 
 /**
  * Registerable factory.
