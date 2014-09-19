@@ -46,7 +46,7 @@ class RegisterableFactoryInjectable
     {
         $class = $this->getClass($name);
         $factory = $this->match($class);
-        return $factory->makeByClass($class, $args);
+        return $factory->make($class, $args);
     }
 
     /**

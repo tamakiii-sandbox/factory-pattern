@@ -77,7 +77,7 @@ class RegisterableFactoryInjectableTest extends \PHPUnit_Framework_TestCase
         Phake::when($this->functions)->classImplements('FugaClass')->thenReturn(array('FugaInterface'));
 
         Phake::when($this->matchers[1])->match('FugaInterface')->thenReturn(true);
-        Phake::when($this->matchers[1])->makeByClass('FugaClass', array())->thenReturn($std);
+        Phake::when($this->matchers[1])->make('FugaClass', array())->thenReturn($std);
 
         $this->assertSame($std, $this->factory->make('fuga'));
     }

@@ -12,11 +12,4 @@ interface MatchableInterface extends FactoryInterface
      * @return boolean
      */
     public function match($interface);
-
-    /**
-     * @param string $class
-     * @param array $args
-     * @return mixed
-     */
-    public function makeByClass($class, array $args = array());
 }
