@@ -8,7 +8,7 @@ use Phake;
 /**
  * Test for factory service provider.
  */
-class FactoryInterfaceTest extends \PHPUnit_Framework_TestCase
+class ServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Set up
