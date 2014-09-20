@@ -49,7 +49,7 @@ class FactoryInterfaceTest extends \PHPUnit_Framework_TestCase
         $dom = ServiceProvider::DOMAIN;
         $this->provider->register($this->container);
         $this->assertInstanceOf('Concretehouse\Dp\Factory\RegisterableInterface', $this->container["$dom.registerable_factory_injectable"]);
-        $this->assertInstanceOf('Concretehouse\Dp\Factory\MatcherInjectableInterface', $this->container["$dom.registerable_factory_injectable"]);
+        $this->assertInstanceOf('Concretehouse\Dp\Factory\FactoryInjectableInterface', $this->container["$dom.registerable_factory_injectable"]);
         $this->assertInstanceOf('Concretehouse\Dp\Factory\Concretes\RegisterableFactoryInjectable', $this->container["$dom.registerable_factory_injectable"]);
     }
 }

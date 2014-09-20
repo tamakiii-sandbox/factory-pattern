@@ -4,14 +4,14 @@ namespace Concretehouse\Dp\Factory\Concretes;
 
 use Concretehouse\Dp\Factory\FunctionsInterface;
 use Concretehouse\Dp\Factory\MatchableInterface;
-use Concretehouse\Dp\Factory\MatcherInjectableInterface;
+use Concretehouse\Dp\Factory\FactoryInjectableInterface;
 
 /**
  * Matcher-injectable registerable factory class.
  */
 class RegisterableFactoryInjectable
     extends Registerable
-    implements MatcherInjectableInterface
+    implements FactoryInjectableInterface
 {
     /**
      * @var array
