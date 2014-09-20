@@ -1,6 +1,6 @@
 <?php
 
-namespace Concretehouse\Dp\Factory\Test\Unit\Concretes;
+namespace Concretehouse\Dp\Factory\Test\Concretes;
 
 use Concretehouse\Dp\Factory\Concretes\Registerable;
 use Phake;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Concretehouse\Dp\Test\Unit\Concretes;
+namespace Concretehouse\Dp\Test\Concretes;
 
 use Concretehouse\Dp\Factory\Concretes\Functions;
 use Phake;
