@@ -100,4 +100,13 @@ class RegisterableTest extends \PHPUnit_Framework_TestCase
         $this->factory->register('exception', '\Exception');
         $this->assertSame($exception, $this->factory->make('exception', array('Test', 100)));
     }
+
+    /**
+     * @test
+     * @expectedException \LogicException
+     */
+    public function throwsExceptionIfNotRegisterd()
+    {
+        $this->factory->make('undefined');
+    }
 }
