@@ -3,9 +3,9 @@
 namespace Concretehouse\Dp\Factory;
 
 /**
- * Matcher injectable interface.
+ * Factory injectable interface.
  */
-interface MatcherInjectableInterface extends FactoryInterface
+interface FactoryInjectableInterface extends FactoryInterface
 {
     /**
      * @param string $name

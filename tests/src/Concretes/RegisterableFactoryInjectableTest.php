@@ -15,17 +15,17 @@ class RegisterableFactoryInjectableTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        // Prepare matcher mocks
-        $this->matchers = array(
+        // Prepare factories mocks
+        $this->factories = array(
             Phake::mock('Concretehouse\Dp\Factory\MatchableInterface'),
             Phake::mock('Concretehouse\Dp\Factory\MatchableInterface'),
             Phake::mock('Concretehouse\Dp\Factory\MatchableInterface'),
         );
 
-        // prepare matcher mocks return
-        Phake::when($this->matchers[0])->match(false);
-        Phake::when($this->matchers[1])->match(false);
-        Phake::when($this->matchers[2])->match(false);
+        // prepare factories mocks return
+        Phake::when($this->factories[0])->match(false);
+        Phake::when($this->factories[1])->match(false);
+        Phake::when($this->factories[2])->match(false);
 
         // Classes
         $this->classes = array(
@@ -41,8 +41,8 @@ class RegisterableFactoryInjectableTest extends \PHPUnit_Framework_TestCase
         $this->factory = new RegisterableFactoryInjectable($this->functions);
 
         // Add factories
-        foreach ($this->matchers as $matcher) {
-            $this->factory->addFactory($matcher);
+        foreach ($this->factories as $factory) {
+            $this->factory->addFactory($factory);
         }
 
         // Add classes
@@ -54,9 +54,9 @@ class RegisterableFactoryInjectableTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function implementsMatcherInjectableIF()
+    public function implementsFactoryInjectableIF()
     {
-        $this->assertInstanceOf('Concretehouse\Dp\Factory\MatcherInjectableInterface', $this->factory);
+        $this->assertInstanceOf('Concretehouse\Dp\Factory\FactoryInjectableInterface', $this->factory);
     }
 
     /**
@@ -70,14 +70,14 @@ class RegisterableFactoryInjectableTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function canSetMatchersFromCtor()
+    public function canSetFactoriesFromCtor()
     {
         $std = new \stdClass;
 
         Phake::when($this->functions)->classImplements('FugaClass')->thenReturn(array('FugaInterface'));
 
-        Phake::when($this->matchers[1])->match('FugaInterface')->thenReturn(true);
-        Phake::when($this->matchers[1])->make('FugaClass', array())->thenReturn($std);
+        Phake::when($this->factories[1])->match('FugaInterface')->thenReturn(true);
+        Phake::when($this->factories[1])->make('FugaClass', array())->thenReturn($std);
 
         $this->assertSame($std, $this->factory->make('fuga'));
     }
@@ -96,7 +96,7 @@ class RegisterableFactoryInjectableTest extends \PHPUnit_Framework_TestCase
      * @test
      * @expectedException \LogicException
      */
-    public function throwsExceptionIfNoMatcherFound()
+    public function throwsExceptionIfNoFactoryFound()
     {
         Phake::when($this->functions)->classImplements('FugaClass')->thenReturn(array('FugaInterface'));
         $this->factory->make('fuga');
