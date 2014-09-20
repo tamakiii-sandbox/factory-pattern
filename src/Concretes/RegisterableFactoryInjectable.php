@@ -2,6 +2,7 @@
 
 namespace Concretehouse\Dp\Factory\Concretes;
 
+use Concretehouse\Dp\Factory\FactoryInterface;
 use Concretehouse\Dp\Factory\FunctionsInterface;
 use Concretehouse\Dp\Factory\MatchableInterface;
 use Concretehouse\Dp\Factory\FactoryInjectableInterface;
@@ -34,6 +35,10 @@ class RegisterableFactoryInjectable
      */
     public function addFactory(MatchableInterface $factory)
     {
+        if (!$factory instanceof FactoryInterface) {
+            throw new \InvalidArgumentException('Factory must implement FactoryInterface.');
+        }
+
         $this->factories[] = $factory;
     }
 

@@ -3,7 +3,11 @@
 namespace Concretehouse\Dp\Factory\Test\Concretes;
 
 use Concretehouse\Dp\Factory\Concretes\RegisterableFactoryInjectable;
+use Concretehouse\Dp\Factory\MatchableInterface;
+use Concretehouse\Dp\Factory\FactoryInterface;
 use Phake;
+
+interface MatchableFactoryInterface extends MatchableInterface, FactoryInterface {}
 
 /**
  * Test for registerable & factory-injectable factory class.
@@ -17,9 +21,9 @@ class RegisterableFactoryInjectableTest extends \PHPUnit_Framework_TestCase
     {
         // Prepare factories mocks
         $this->factories = array(
-            Phake::mock('Concretehouse\Dp\Factory\MatchableInterface'),
-            Phake::mock('Concretehouse\Dp\Factory\MatchableInterface'),
-            Phake::mock('Concretehouse\Dp\Factory\MatchableInterface'),
+            Phake::mock(__NAMESPACE__ . '\MatchableFactoryInterface'),
+            Phake::mock(__NAMESPACE__ . '\MatchableFactoryInterface'),
+            Phake::mock(__NAMESPACE__ . '\MatchableFactoryInterface'),
         );
 
         // prepare factories mocks return
@@ -80,6 +84,26 @@ class RegisterableFactoryInjectableTest extends \PHPUnit_Framework_TestCase
         Phake::when($this->factories[1])->make('FugaClass', array())->thenReturn($std);
 
         $this->assertSame($std, $this->factory->make('fuga'));
+    }
+
+    /**
+     * @test
+     * @expectedException \PHPUnit_Framework_Error
+     */
+    public function throwsExceptionIfNonMAtchableInterfaceImplementedObjectSpecified()
+    {
+        $this->factory->addFactory(new \stdClass);
+    }
+
+    /**
+     * @test
+     * @expectedException \InvalidArgumentException
+     */
+    public function throwsExceptionIfNonFactoryInterfaceImplementedObjectSpecified()
+    {
+        $this->factory->addFactory(
+            Phake::mock('Concretehouse\Dp\Factory\MatchableInterface')
+        );
     }
 
     /**
