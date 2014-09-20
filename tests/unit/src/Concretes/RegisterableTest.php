@@ -33,7 +33,7 @@ class RegisterableTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function canCreateWithRegisteredWithRegisterMethod()
+    public function canMakeWithRegisterMethod()
     {
         $array = new \SplFixedArray(10);
 
@@ -42,6 +42,31 @@ class RegisterableTest extends \PHPUnit_Framework_TestCase
             ->thenReturn($array);
 
         $this->factory->register('fixed_array', '\SplFixedArray');
+        $this->assertSame($array, $this->factory->make('fixed_array', array(10)));
+    }
+
+    /**
+     * @test
+     */
+    public function canMakeWithRegistersMethod()
+    {
+        $std = new \stdClass;
+        $array = new \SplFixedArray(10);
+
+        Phake::when($this->functions)
+            ->newInstanceArgs('\stdClass', array())
+            ->thenReturn($std);
+
+        Phake::when($this->functions)
+            ->newInstanceArgs('\SplFixedArray', array(10))
+            ->thenReturn($array);
+
+        $this->factory->registers(array(
+            'std' => '\stdClass',
+            'fixed_array' => '\SplFixedArray',
+        ));
+
+        $this->assertSame($std, $this->factory->make('std'));
         $this->assertSame($array, $this->factory->make('fixed_array', array(10)));
     }
 
