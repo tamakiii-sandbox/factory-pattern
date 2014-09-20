@@ -33,20 +33,6 @@ class RegisterableTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function canCreateWithRegisteredInConstructor()
-    {
-        $std = new \stdClass;
-
-        Phake::when($this->functions)
-            ->newInstanceArgs('\stdClass', array())
-            ->thenReturn($std);
-
-        $this->assertSame($std, $this->factory->make('std'));
-    }
-
-    /**
-     * @test
-     */
     public function canCreateWithRegisteredWithRegisterMethod()
     {
         $array = new \SplFixedArray(10);
