@@ -109,4 +109,32 @@ class RegisterableTest extends \PHPUnit_Framework_TestCase
     {
         $this->factory->make('undefined');
     }
+
+    /**
+     * @test
+     * @expectedException \UnexpectedValueException
+     */
+    public function throwsExceptionIfNewInstanceArgsReturnedNull()
+    {
+        Phake::when($this->functions)
+            ->newInstanceArgs('Null', array())
+            ->thenReturn(null);
+
+        $this->factory->register('null', 'Null');
+        $this->factory->make('null');
+    }
+
+    /**
+     * @test
+     * @expectedException \UnexpectedValueException
+     */
+    public function throwsExceptionIfNewInstanceArgsReturnedNonObject()
+    {
+        Phake::when($this->functions)
+            ->newInstanceArgs('String', array())
+            ->thenReturn('hello, world');
+
+        $this->factory->register('string', 'String');
+        $this->factory->make('string');
+    }
 }

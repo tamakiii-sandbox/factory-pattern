@@ -33,12 +33,18 @@ class Registerable implements RegisterableInterface
     /**
      * @param string $name
      * @parma array $args
-     * @return mixed
+     * @return object
      */
     public function make($name, array $args = array())
     {
         $class = $this->getClass($name);
-        return $this->getFunctions()->newInstanceArgs($class, $args);
+        $object = $this->getFunctions()->newInstanceArgs($class, $args);
+
+        if (empty($object) || !is_object($object)) {
+            throw new \UnexpectedValueException("Failed to create new instance with {$name}({$class})");
+        }
+
+        return $object;
     }
 
     /**
