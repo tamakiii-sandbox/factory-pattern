@@ -1,6 +1,6 @@
 <?php
 
-namespace Concretehouse\Dp\Test\Unit;
+namespace Concretehouse\Dp\Test;
 
 use Phake;
 
