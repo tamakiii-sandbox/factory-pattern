@@ -5,7 +5,7 @@ namespace Concretehouse\Dp\Factory;
 /**
  * Matchable factory interface.
  */
-interface MatchableInterface extends FactoryInterface
+interface MatchableInterface
 {
     /**
      * @param string $interface
