@@ -20,9 +20,6 @@
         "phpunit/phpunit": "4.2.*",
         "Phake/phake": "dev-master"
     },
-    "bin": [
-        "bin/phpunit"
-    ],
     "config": {
         "vendor-dir": "vendor"
     }
