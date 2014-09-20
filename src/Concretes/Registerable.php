@@ -63,6 +63,16 @@ class Registerable implements RegisterableInterface
     }
 
     /**
+     * @param array $list
+     */
+    public function registers(array $list)
+    {
+        foreach ($list as $name => $class) {
+            $this->register($name, $class);
+        }
+    }
+
+    /**
      * @return FunctionsInterface
      */
     protected function getFunctions()
