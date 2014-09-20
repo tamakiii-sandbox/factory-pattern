@@ -16,18 +16,18 @@ class ServiceProvider implements \Pimple\ServiceProviderInterface
      */
     public function register(\Pimple\Container $container)
     {
-        $dom = self::DOMAIN;
+        $domain = self::DOMAIN;
 
-        $container["$dom.functions"] = function($c) {
+        $container["$domain.functions"] = function($c) {
             return new Concretes\Functions;
         };
 
-        $container["$dom.registerable"] = function($c) use ($dom) {
-            return new Concretes\Registerable($c["$dom.functions"]);
+        $container["$domain.registerable"] = function($c) use ($domain) {
+            return new Concretes\Registerable($c["$domain.functions"]);
         };
 
-        $container["$dom.registerable_factory_injectable"] = function($c) use ($dom) {
-            return new Concretes\RegisterableFactoryInjectable($c["$dom.functions"]);
+        $container["$domain.registerable_factory_injectable"] = function($c) use ($domain) {
+            return new Concretes\RegisterableFactoryInjectable($c["$domain.functions"]);
         };
     }
 }
