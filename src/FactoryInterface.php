@@ -10,7 +10,7 @@ interface FactoryInterface
     /**
      * @param string $name
      * @param array $args
-     * @return mixed
+     * @return object
      */
     public function make($name, array $args = array());
 }
