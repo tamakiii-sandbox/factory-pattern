@@ -9,7 +9,7 @@ interface FixedFactoryInterface
 {
     /**
      * @param mixed
-     * @return mixed
+     * @return object
      */
     public function make();
 }
