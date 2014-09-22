@@ -5,7 +5,7 @@ namespace Concretehouse\Dp\Factory;
 /**
  * Fixed type factory interface.
  */
-interface FixedTypeInterface
+interface FixedTypeInterface extends FactoryInterface
 {
     /**
      * @return string $class
