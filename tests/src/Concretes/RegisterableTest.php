@@ -15,11 +15,21 @@ class RegisterableTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->functions = Phake::mock('Concretehouse\Dp\Factory\FunctionsInterface');
+        $this->std = new \stdClass;
+        $this->array = new \SplFixedArray(10);
 
+        $this->functions = Phake::mock('Concretehouse\Dp\Factory\FunctionsInterface');
         $this->factory = new Registerable($this->functions);
 
         $this->factory->register('std', '\stdClass');
+
+        Phake::when($this->functions)
+            ->newInstanceArgs('\stdClass', Phake::ignoreRemaining())
+            ->thenReturn($this->std);
+
+        Phake::when($this->functions)
+            ->newInstanceArgs('\SplFixedArray', array(10))
+            ->thenReturn($this->array);
     }
 
     /**
@@ -35,14 +45,8 @@ class RegisterableTest extends \PHPUnit_Framework_TestCase
      */
     public function canMakeWithRegisterMethod()
     {
-        $array = new \SplFixedArray(10);
-
-        Phake::when($this->functions)
-            ->newInstanceArgs('\SplFixedArray', array(10))
-            ->thenReturn($array);
-
         $this->factory->register('fixed_array', '\SplFixedArray');
-        $this->assertSame($array, $this->factory->make('fixed_array', array(10)));
+        $this->assertSame($this->array, $this->factory->make('fixed_array', array(10)));
     }
 
     /**
@@ -50,24 +54,53 @@ class RegisterableTest extends \PHPUnit_Framework_TestCase
      */
     public function canMakeWithRegistersMethod()
     {
-        $std = new \stdClass;
-        $array = new \SplFixedArray(10);
-
-        Phake::when($this->functions)
-            ->newInstanceArgs('\stdClass', array())
-            ->thenReturn($std);
-
-        Phake::when($this->functions)
-            ->newInstanceArgs('\SplFixedArray', array(10))
-            ->thenReturn($array);
-
         $this->factory->registers(array(
             'std' => '\stdClass',
             'fixed_array' => '\SplFixedArray',
         ));
 
-        $this->assertSame($std, $this->factory->make('std'));
-        $this->assertSame($array, $this->factory->make('fixed_array', array(10)));
+        $this->assertSame($this->std, $this->factory->make('std'));
+        $this->assertSame($this->array, $this->factory->make('fixed_array', array(10)));
+    }
+
+    /**
+     * @test
+     */
+    public function canMakeWithRegistersMethodWithArgs()
+    {
+        $this->factory->registers(array(
+            'std' => array('\stdClass', array('a', 'b')),
+        ));
+
+        $this->assertSame($this->std, $this->factory->make('std'));
+    }
+
+    /**
+     * @test
+     */
+    public function mergeDefaultArgsWithRegisters()
+    {
+        $this->factory->registers(array(
+            'std' => array('\stdClass', array('a', 'b')),
+        ));
+
+        $this->assertSame($this->std, $this->factory->make('std', array('A')));
+
+        Phake::verify($this->functions, Phake::times(1))
+            ->newInstanceArgs('\stdClass', array('A', 'b'));
+    }
+
+    /**
+     * @test
+     */
+    public function mergeDefaultArgsWithRegister()
+    {
+        $this->factory->register('std', '\stdClass', array('a', 'b'));
+
+        $this->assertSame($this->std, $this->factory->make('std', array('A')));
+
+        Phake::verify($this->functions, Phake::times(1))
+            ->newInstanceArgs('\stdClass', array('A', 'b'));
     }
 
     /**
