@@ -8,26 +8,23 @@ use Concretehouse\Dp\Factory\RegisterableInterface;
 /**
  * Registerable factory.
  */
-class Registerable implements RegisterableInterface
+class Registerable
+    extends Factory
+    implements RegisterableInterface
 {
     /**
      * @var array
      */
     private $list;
 
-    /**
-     * @var FunctionsInterface
-     */
-    private $functions;
-
 
     /**
-     * Constructor
+     * @param FunctionsInterface $functions
      */
     public function __construct(FunctionsInterface $functions)
     {
+        parent::__construct($functions);
         $this->list = array();
-        $this->functions = $functions;
     }
 
     /**
@@ -41,15 +38,7 @@ class Registerable implements RegisterableInterface
         $class = $this->getClass($name);
         $args = array_replace($this->getArgs($name), $args);
 
-        // Instantiate
-        $object = $this->getFunctions()->newInstanceArgs($class, $args);
-
-        // Check if $object is not object
-        if (empty($object) || !is_object($object)) {
-            throw new \UnexpectedValueException("Failed to create new instance with {$name}({$class})");
-        }
-
-        return $object;
+        return parent::make($class, $args);
     }
 
     /**
@@ -113,13 +102,5 @@ class Registerable implements RegisterableInterface
         }
 
         return array($array[0], isset($array[1]) ? $array[1] : array());
-    }
-
-    /**
-     * @return FunctionsInterface
-     */
-    protected function getFunctions()
-    {
-        return $this->functions;
     }
 }
