@@ -10,8 +10,9 @@ interface RegisterableInterface extends FactoryInterface
     /**
      * @param string $name
      * @param string $class
+     * @param array $args
      */
-    public function register($name, $class);
+    public function register($name, $class, array $args = array());
 
     /**
      * @param array $list
