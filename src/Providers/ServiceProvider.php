@@ -22,12 +22,30 @@ class ServiceProvider implements \Pimple\ServiceProviderInterface
             return new Concretes\Functions;
         };
 
-        $container["$domain.registerable"] = function($c) use ($domain) {
+        $container["$domain._factory"] = function($c) use ($domain) {
             return new Concretes\Registerable($c["$domain.functions"]);
         };
 
-        $container["$domain.registerable_factory_injectable"] = function($c) use ($domain) {
-            return new Concretes\RegisterableFactoryInjectable($c["$domain.functions"]);
+        $container["$domain.factory"] = function($c) use ($domain) {
+            $functions = $c["$domain.functions"];
+            $factory = $c["$domain._factory"];
+
+            $factory->registers(array(
+                'registerable' => array(
+                    'Concretehouse\Dp\Factory\Concretes\Registerable',
+                    array($functions)
+                ),
+                'registerable_fixed_type' => array(
+                    'Concretehouse\Dp\Factory\Concretes\RegisterableFixedType',
+                    array(null, $functions)
+                ),
+                'registerable_factory_injectable' => array(
+                    'Concretehouse\Dp\Factory\Concretes\RegisterableFactoryInjectable',
+                    array($functions)
+                ),
+            ));
+
+            return $factory;
         };
     }
 }

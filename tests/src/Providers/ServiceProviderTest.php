@@ -33,23 +33,56 @@ class ServiceProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function registersRegisterable()
+    public function registersFactory()
     {
         $domain = ServiceProvider::DOMAIN;
         $this->provider->register($this->container);
-        $this->assertInstanceOf('Concretehouse\Dp\Factory\RegisterableInterface', $this->container["$domain.registerable"]);
-        $this->assertInstanceOf('Concretehouse\Dp\Factory\Concretes\Registerable', $this->container["$domain.registerable"]);
+        $this->assertInstanceOf('Concretehouse\Dp\Factory\FactoryInterface', $this->container["$domain.factory"]);
+        $this->assertInstanceOf('Concretehouse\Dp\Factory\RegisterableInterface', $this->container["$domain.factory"]);
+        $this->assertInstanceOf('Concretehouse\Dp\Factory\Concretes\Registerable', $this->container["$domain.factory"]);
     }
 
     /**
      * @test
      */
-    public function registersRegisterableFactoryInjectable()
+    public function canMakeRegisterableFromFactory()
     {
         $domain = ServiceProvider::DOMAIN;
         $this->provider->register($this->container);
-        $this->assertInstanceOf('Concretehouse\Dp\Factory\RegisterableInterface', $this->container["$domain.registerable_factory_injectable"]);
-        $this->assertInstanceOf('Concretehouse\Dp\Factory\FactoryInjectableInterface', $this->container["$domain.registerable_factory_injectable"]);
-        $this->assertInstanceOf('Concretehouse\Dp\Factory\Concretes\RegisterableFactoryInjectable', $this->container["$domain.registerable_factory_injectable"]);
+        $object = $this->container["$domain.factory"]->make('registerable');
+
+        $this->assertInstanceOf('Concretehouse\Dp\Factory\FactoryInterface', $object);
+        $this->assertInstanceOf('Concretehouse\Dp\Factory\RegisterableInterface', $object);
+        $this->assertInstanceOf('Concretehouse\Dp\Factory\Concretes\Registerable', $object);
+    }
+
+    /**
+     * @test
+     */
+    public function canMakeRegisterableFixedTypeFromFactory()
+    {
+        $domain = ServiceProvider::DOMAIN;
+        $this->provider->register($this->container);
+        $object = $this->container["$domain.factory"]->make('registerable_fixed_type', array('Countable'));
+
+        $this->assertInstanceOf('Concretehouse\Dp\Factory\FixedTypeInterface', $object);
+        $this->assertInstanceOf('Concretehouse\Dp\Factory\Concretes\RegisterableFixedType', $object);
+
+        $this->assertSame('Countable', $object->getType());
+    }
+
+    /**
+     * @test
+     */
+    public function canMakeRegisterableFactoryInjectableFromFactory()
+    {
+        $domain = ServiceProvider::DOMAIN;
+        $this->provider->register($this->container);
+        $object = $this->container["$domain.factory"]->make('registerable_factory_injectable');
+
+        $this->assertInstanceOf('Concretehouse\Dp\Factory\FactoryInterface', $object);
+        $this->assertInstanceOf('Concretehouse\Dp\Factory\RegisterableInterface', $object);
+        $this->assertInstanceOf('Concretehouse\Dp\Factory\FactoryInjectableInterface', $object);
+        $this->assertInstanceOf('Concretehouse\Dp\Factory\Concretes\RegisterableFactoryInjectable', $object);
     }
 }
